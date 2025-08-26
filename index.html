@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Book Collection</title>
+    <!-- Use the Inter font for a clean, modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Load Tailwind CSS from CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        /* Style for the scrollbar to make it look clean */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #9ca3af;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #6b7280;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-10 px-4">
+
+    <!-- Header Section -->
+    <header class="w-full max-w-6xl text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2">
+            Welcome to Our Free Book Collection
+        </h1>
+        <p class="text-lg text-gray-600">
+            A curated selection of classic and public domain books. Enjoy your reading!
+        </p>
+    </header>
+
+    <!-- Main Content - Book Cards Container -->
+    <main class="w-full max-w-6xl">
+        <div id="book-collection" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <!-- Book cards will be dynamically added here by JavaScript -->
+        </div>
+    </main>
+
+    <!-- JavaScript to handle book data and rendering -->
+    <script>
+        // Use a self-invoking anonymous function to keep variables out of the global scope
+        (function() {
+            // A hard-coded array of book objects.
+            // In a real application, this data would likely come from a database.
+            const books = [
+                {
+                    title: "Pride and Prejudice",
+                    author: "Jane Austen",
+                    imageUrl: "https://placehold.co/400x600/64748b/ffffff?text=Pride+and+Prejudice",
+                    pdfUrl: "https://www.gutenberg.org/files/1342/1342-h/1342-h.htm"
+                },
+                {
+                    title: "The Adventures of Sherlock Holmes",
+                    author: "Arthur Conan Doyle",
+                    imageUrl: "https://placehold.co/400x600/64748b/ffffff?text=Sherlock+Holmes",
+                    pdfUrl: "https://www.gutenberg.org/files/1661/1661-h/1661-h.htm"
+                },
+                {
+                    title: "Alice's Adventures in Wonderland",
+                    author: "Lewis Carroll",
+                    imageUrl: "https://placehold.co/400x600/64748b/ffffff?text=Alice+in+Wonderland",
+                    pdfUrl: "https://www.gutenberg.org/files/11/11-h/11-h.htm"
+                },
+                {
+                    title: "Moby Dick",
+                    author: "Herman Melville",
+                    imageUrl: "https://placehold.co/400x600/64748b/ffffff?text=Moby+Dick",
+                    pdfUrl: "https://www.gutenberg.org/files/2701/2701-h/2701-h.htm"
+                },
+                {
+                    title: "The Count of Monte Cristo",
+                    author: "Alexandre Dumas",
+                    imageUrl: "https://placehold.co/400x600/64748b/ffffff?text=The+Count+of+Monte+Cristo",
+                    pdfUrl: "https://www.gutenberg.org/files/1184/1184-h/1184-h.htm"
+                },
+                {
+                    title: "Frankenstein",
+                    author: "Mary Shelley",
+                    imageUrl: "https://placehold.co/400x600/64748b/ffffff?text=Frankenstein",
+                    pdfUrl: "https://www.gutenberg.org/files/84/84-h/84-h.htm"
+                },
+                {
+                    title: "War and Peace",
+                    author: "Leo Tolstoy",
+                    imageUrl: "https://placehold.co/400x600/64748b/ffffff?text=War+and+Peace",
+                    pdfUrl: "https://www.gutenberg.org/files/2600/2600-h/2600-h.htm"
+                },
+                {
+                    title: "The Republic",
+                    author: "Plato",
+                    imageUrl: "https://placehold.co/400x600/64748b/ffffff?text=The+Republic",
+                    pdfUrl: "https://www.gutenberg.org/files/1497/1497-h/1497-h.htm"
+                }
+            ];
+
+            // Get the container where the book cards will be rendered
+            const bookCollectionDiv = document.getElementById('book-collection');
+
+            // Function to create and return an HTML element for a single book card
+            function createBookCard(book) {
+                // Create the main container div for the card
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden transform hover:-translate-y-2';
+
+                // Create the image element with a placeholder
+                const imageEl = document.createElement('img');
+                imageEl.src = book.imageUrl;
+                imageEl.alt = `Cover of ${book.title}`;
+                imageEl.className = 'w-full h-72 object-cover';
+                // Add an onerror fallback in case the placeholder image fails to load
+                imageEl.onerror = "this.onerror=null;this.src='https://placehold.co/400x600/cccccc/000000?text=Image+Unavailable';";
+
+                // Create the text content container
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'p-6 flex flex-col justify-between h-48';
+
+                // Create the book title heading
+                const titleHeading = document.createElement('h3');
+                titleHeading.className = 'text-xl font-bold text-gray-800 mb-1';
+                titleHeading.textContent = book.title;
+
+                // Create the author paragraph
+                const authorParagraph = document.createElement('p');
+                authorParagraph.className = 'text-gray-500 text-sm mb-4';
+                authorParagraph.textContent = `by ${book.author}`;
+
+                // Create the "Read Now" button link
+                const readNowLink = document.createElement('a');
+                readNowLink.href = book.pdfUrl;
+                readNowLink.target = '_blank'; // Open in a new tab
+                readNowLink.className = 'w-full text-center py-2 px-4 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2';
+                readNowLink.textContent = 'Read Now';
+
+                // Assemble the card
+                contentDiv.appendChild(titleHeading);
+                contentDiv.appendChild(authorParagraph);
+                contentDiv.appendChild(readNowLink);
+
+                cardDiv.appendChild(imageEl);
+                cardDiv.appendChild(contentDiv);
+
+                return cardDiv;
+            }
+
+            // Function to render all the books in the collection
+            function renderBooks() {
+                // Clear any existing content
+                bookCollectionDiv.innerHTML = '';
+                // Loop through each book and add its card to the page
+                books.forEach(book => {
+                    const bookCard = createBookCard(book);
+                    bookCollectionDiv.appendChild(bookCard);
+                });
+            }
+
+            // Call the render function once the DOM is ready
+            // This ensures the container element exists before we try to add cards to it
+            document.addEventListener('DOMContentLoaded', renderBooks);
+        })();
+    </script>
+
+</body>
+</html>
